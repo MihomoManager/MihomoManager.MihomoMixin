@@ -1,12 +1,6 @@
 ﻿using MihomoManager.MihomoMixin;
-using SharpYaml;
 using System.Text;
 
-var c =  new EditActionConfiguration(new EditActionConfiguration.Modification(["pro"], [], []),
-    new EditActionConfiguration.Modification(["pro"], [], []),
-    new EditActionConfiguration.Modification(["pro"], [], []),
-    new Dictionary<string, IReadOnlyList<string>>());
-Console.WriteLine(YamlSerializer.Serialize(c));
 
 var knownActions = new Dictionary<string, Func<string, IMihomoMixinAction>>()
 {
