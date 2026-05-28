@@ -1,6 +1,11 @@
 ﻿using MihomoManager.MihomoMixin;
 using System.Text;
 
+if (args.Length == 0)
+{
+    await Console.Error.WriteLineAsync("For help, please check https://github.com/MihomoManager/MihomoManager.MihomoMixin");
+    return 1;
+}
 
 var knownActions = new Dictionary<string, Func<string, IMihomoMixinAction>>()
 {
