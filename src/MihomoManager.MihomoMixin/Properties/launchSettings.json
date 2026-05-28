@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "merge": {
+      "commandName": "Project",
+      "commandLineArgs": "merge test/m1.yaml merge test/m2.yaml edit test/e1.yaml"
+    }
+  }
+}
