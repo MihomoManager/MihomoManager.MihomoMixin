@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="MihomoManager.MihomoMixin/MihomoManager.MihomoMixin.csproj" />
+  <Project Path="Test/Test.csproj" Id="59438bd1-e3f5-416b-87c7-5a002260fddc" />
 </Solution>

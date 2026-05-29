@@ -1,7 +1,7 @@
 ﻿using MihomoManager.MihomoMixin;
+using MihomoManager.MihomoMixin.Js;
 using MihomoManager.MihomoMixin.Merge;
 using MihomoManager.MihomoMixin.Output;
-using System.Text;
 
 if (args.Length == 0)
 {
@@ -13,7 +13,8 @@ var knownActions = new IMihomoMixinActionFactory[]
 {
     new MergeActionFactory(),
     new EditActionFactory(),
-    new SaveActionFactory()
+    new SaveActionFactory(),
+    new JsActionFactory()
 };
 var knownActionsDictionary = new Dictionary<string, IMihomoMixinActionFactory>();
 foreach (var action in knownActions)

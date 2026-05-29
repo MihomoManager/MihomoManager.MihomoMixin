@@ -6,7 +6,7 @@
     },
     "merge": {
       "commandName": "Project",
-      "commandLineArgs": "merge test/m1.yaml merge test/m2.yaml edit test/e1.yaml save test/output.yaml"
+      "commandLineArgs": "merge test/m1.yaml\r\nmerge test/m2.yaml\r\nedit test/e1.yaml\r\njs test/j1.js\r\nsave test/output.yaml"
     }
   }
 }
