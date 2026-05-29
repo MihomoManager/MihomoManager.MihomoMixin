@@ -1,16 +1,27 @@
-﻿using SharpYaml;
+﻿using MihomoManager.MihomoMixin.Edit;
+using SharpYaml;
 using SharpYaml.Model;
 using System.Diagnostics;
 
-namespace MihomoManager.MihomoMixin;
+namespace MihomoManager.MihomoMixin.Merge;
 
-public sealed class MergeAction(string configuration) : IMihomoMixinAction
+public sealed class MergeAction(string fileToMerge) : IMihomoMixinAction
 {
-    public string Mixin(string current)
+    public async ValueTask<string> MixinAsync(string current)
     {
         var target = YamlSerializer.Deserialize<YamlElement>(current);
-        var value = YamlSerializer.Deserialize<YamlElement>(configuration);
+        var configurationFileContent = await File.ReadAllTextAsync(fileToMerge);
+        var value = YamlSerializer.Deserialize<YamlElement>(configurationFileContent);
         return YamlSerializer.Serialize(this.Merge(target, value));
+    }
+
+    public string ToStringForPrint()
+    {
+        return
+            $"""
+            merge
+              fileToMerge: {fileToMerge}
+            """;
     }
 
     private YamlElement? Merge(YamlElement? target, YamlElement? value)

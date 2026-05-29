@@ -1,4 +1,6 @@
 ﻿using MihomoManager.MihomoMixin;
+using MihomoManager.MihomoMixin.Merge;
+using MihomoManager.MihomoMixin.Output;
 using System.Text;
 
 if (args.Length == 0)
@@ -7,74 +9,72 @@ if (args.Length == 0)
     return 1;
 }
 
-var knownActions = new Dictionary<string, Func<string, IMihomoMixinAction>>()
+var knownActions = new IMihomoMixinActionFactory[]
 {
-    ["merge"] = (s) => new MergeAction(s),
-    ["edit"] = (s) => new EditAction(s)
+    new MergeActionFactory(),
+    new EditActionFactory(),
+    new SaveActionFactory()
 };
-var actions = new List<(int index, string action, string script)>();
+var knownActionsDictionary = new Dictionary<string, IMihomoMixinActionFactory>();
+foreach (var action in knownActions)
+{
+    knownActionsDictionary.Add(action.Name, action);
+}
+
+var actions = new List<IMihomoMixinAction>();
 async Task PrintActionsToErrorAsync()
 {
-    int actionWidth = knownActions.Keys.Max(x => x.Length);
-
-    foreach (var action in actions)
+    foreach (var (index, action) in actions.Index())
     {
-        await Console.Error.WriteLineAsync($"  {action.index}. {action.action.PadRight(actionWidth)}  {action.script}");
+        await Console.Error.WriteLineAsync($"{index + 1}. {action.ToStringForPrint()}");
     }
 }
 
-foreach (var (index, arg) in args.Chunk(2).Index())
+for (int i = 0; i < args.Length; )
 {
-    if (arg.Length == 1)
+    var actionName = args[i];
+
+    if (!knownActionsDictionary.TryGetValue(actionName, out var action))
     {
-        await Console.Error.WriteLineAsync($"No script provided for action {arg[0]}. Resolved Actions:");
+        await Console.Error.WriteLineAsync($"Unknown action {actionName}. Resolved Actions:");
         await PrintActionsToErrorAsync();
+        await Console.Error.WriteLineAsync($"Resolving. {actionName}    <-- Unknown action");
         return 1;
     }
-    if (!knownActions.ContainsKey(arg[0]))
+    var argumentBegin = i + 1;
+    i = argumentBegin + action.ParameterCount;
+
+    if (i > args.Length)
     {
-        await Console.Error.WriteLineAsync($"Unknown action {arg[0]}. Resolved Actions:");
+        var foundArguments = args[argumentBegin..];
+
+        await Console.Error.WriteLineAsync($"No sufficient arguments provided for action {actionName}. Resolved Actions:");
         await PrintActionsToErrorAsync();
+        await Console.Error.WriteLineAsync($"Resolving. {actionName}    <-- Only {foundArguments.Length} arguments provided but requires {action.ParameterCount}");
+        await Console.Error.WriteLineAsync($"  Arguments found:");
+        foreach (var (index, argument) in foundArguments.Index())
+        {
+            await Console.Error.WriteLineAsync($"    {index + 1}. {argument}");
+        }
         return 1;
     }
-    actions.Add((index + 1, arg[0], arg[1]));
+
+    actions.Add(action.Create(args.AsSpan(argumentBegin, action.ParameterCount)));
 }
 
 
 var current = "{}";
-foreach (var action in actions)
+foreach (var (index, action) in actions.Index())
 {
-    string script;
     try
     {
-        script = await File.ReadAllTextAsync(action.script);
+        current = await action.MixinAsync(current);
     }
     catch (Exception ex)
     {
-        await Console.Error.WriteLineAsync($"Failed to load script for action {action.index} ({action.action}).");
-        await Console.Error.WriteLineAsync($"Script path:");
-        await Console.Error.WriteLineAsync($"{action.script}");
-        await Console.Error.WriteLineAsync();
-        await Console.Error.WriteLineAsync($"All Actions:");
-        await PrintActionsToErrorAsync();
-        await Console.Error.WriteLineAsync();
-        await Console.Error.WriteLineAsync($"Exception:");
-        await Console.Error.WriteLineAsync($"{ex}");
-        return 1;
-    }
-
-    try
-    {
-        current = knownActions[action.action](script).Mixin(current);
-    }
-    catch (Exception ex)
-    {
-        await Console.Error.WriteLineAsync($"Failed to execute action {action.index} ({action.action}).");
-        await Console.Error.WriteLineAsync($"Script path:");
-        await Console.Error.WriteLineAsync($"{action.script}");
-        await Console.Error.WriteLineAsync();
-        await Console.Error.WriteLineAsync($"Script:");
-        await Console.Error.WriteLineAsync($"{script}");
+        await Console.Error.WriteLineAsync($"Failed to execute action {index + 1}.");
+        await Console.Error.WriteLineAsync($"Action:");
+        await Console.Error.WriteLineAsync($"{action.ToStringForPrint()}");
         await Console.Error.WriteLineAsync();
         await Console.Error.WriteLineAsync($"Input:");
         await Console.Error.WriteLineAsync($"{current}");
@@ -88,5 +88,4 @@ foreach (var action in actions)
     }
 }
 
-await Console.Out.WriteLineAsync(Convert.ToBase64String(Encoding.UTF8.GetBytes(current)));
 return 0;

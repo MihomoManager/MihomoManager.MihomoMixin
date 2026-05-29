@@ -6,5 +6,6 @@ namespace MihomoManager.MihomoMixin;
 
 public interface IMihomoMixinAction
 {
-    string Mixin(string current);
+    ValueTask<string> MixinAsync(string current);
+    string ToStringForPrint();
 }
