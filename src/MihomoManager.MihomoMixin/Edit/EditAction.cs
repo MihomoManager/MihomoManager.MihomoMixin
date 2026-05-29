@@ -3,13 +3,13 @@ using SharpYaml.Model;
 
 namespace MihomoManager.MihomoMixin.Edit;
 
-public sealed class EditAction(string configurationFile) : IMihomoMixinAction
+public sealed class EditAction(string editConfiguration) : IMihomoMixinAction
 {
     public async ValueTask<string> MixinAsync(string current)
     {
         var target = YamlSerializer.Deserialize<YamlElement>(current);
-        var configurationFileContent = await File.ReadAllTextAsync(configurationFile);
-        var configuration = YamlSerializer.Deserialize<EditActionConfiguration>(configurationFileContent);
+        var editConfigurationContent = await File.ReadAllTextAsync(editConfiguration);
+        var configuration = YamlSerializer.Deserialize<EditActionConfiguration>(editConfigurationContent);
         if (configuration is null)
             return current;
 
@@ -27,7 +27,7 @@ public sealed class EditAction(string configurationFile) : IMihomoMixinAction
         return
             $"""
             edit
-              configurationFile: {configurationFile}
+              editConfiguration: {editConfiguration}
             """;
     }
     private static void EditRules(YamlMapping root, EditActionConfiguration.Modification edit)
