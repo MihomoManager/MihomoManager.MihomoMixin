@@ -3,7 +3,7 @@ using MihomoManager.MihomoMixin.Merge;
 using SharpYaml;
 using SharpYaml.Model;
 
-namespace MihomoManager.MihomoMixin;
+namespace MihomoManager.MihomoMixin.Edit;
 
 public sealed class EditActionFactory : IMihomoMixinActionFactory
 {

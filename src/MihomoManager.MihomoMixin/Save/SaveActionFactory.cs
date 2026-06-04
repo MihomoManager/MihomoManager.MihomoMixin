@@ -1,4 +1,4 @@
-﻿namespace MihomoManager.MihomoMixin.Output;
+﻿namespace MihomoManager.MihomoMixin.Save;
 
 public sealed class SaveActionFactory : IMihomoMixinActionFactory
 {

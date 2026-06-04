@@ -15,7 +15,7 @@ public sealed class JsAction(string script) : IMihomoMixinAction
 
         var result = await engine.InvokeAsync("main", 
             target, new Action<string>(Console.Error.WriteLine));
-        return YamlSerializer.Serialize(target);
+        return YamlSerializer.Serialize(result.ToObject());
     }
 
     public string ToStringForPrint()

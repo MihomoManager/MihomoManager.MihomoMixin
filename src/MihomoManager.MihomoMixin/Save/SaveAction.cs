@@ -3,7 +3,7 @@ using SharpYaml;
 using SharpYaml.Model;
 using System.Diagnostics;
 
-namespace MihomoManager.MihomoMixin.Output;
+namespace MihomoManager.MihomoMixin.Save;
 
 public sealed class SaveAction(string destination) : IMihomoMixinAction
 {
