@@ -7,6 +7,8 @@
 1. Install [.NET](https://dotnet.microsoft.com/)
 2. Download the zip file from [Releases](https://github.com/MihomoManager/MihomoManager.MihomoMixin/releases/latest) and extract it.
 
+> For Nix/NixOS, check [https://github.com/MihomoManager/MihomoManager.MihomoMixin-Nix](https://github.com/MihomoManager/MihomoManager.MihomoMixin-Nix).
+
 ### Quick Start
 
 Prepare a configuration file, e.g. `configuration.yaml`:
