@@ -22,4 +22,8 @@
 		<PackageReference Include="SharpYaml" Version="3.7.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<EmbeddedResource Include="Js/js-yaml.umd.min.js" />
+	</ItemGroup>
+
 </Project>
