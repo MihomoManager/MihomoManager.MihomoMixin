@@ -30,7 +30,12 @@
                 name = "dev-publish";
                 text = ''
                   mkdir -p publish
-                  dotnet pack src/MihomoManager.MihomoMixin/MihomoManager.MihomoMixin.csproj -c Release -o publish
+                  temp=$(mktemp -d -p publish)
+
+                  dotnet publish src/MihomoManager.MihomoMixin/MihomoManager.MihomoMixin.csproj -c Release -o "$temp/MihomoManager.MihomoMixin"
+                  ouch compress "$temp/MihomoManager.MihomoMixin"/* "$temp/MihomoManager.MihomoMixin.zip"
+
+                  dotnet pack src/MihomoManager.MihomoMixin/MihomoManager.MihomoMixin.csproj -o "$temp"
                 '';
               })
             ];
