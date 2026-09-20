@@ -156,7 +156,7 @@ function main(config, log) {
 }
 ```
 
-This is similar to the [Clash Verge script feature](https://www.clashverge.dev/guide/script.html), but with key differences in how it works under the hood: it uses the Jint engine to run JavaScript in C#, and the `config` parameter is a dictionary deserialized by SharpYaml. The second parameter `log` prints strings to the standard error stream for debugging, rather than being a configuration name.
+This is similar to the [Clash Verge script feature](https://www.clashverge.dev/guide/script.html), but with key differences in how it works under the hood: it uses the Jint engine to run JavaScript in C#, and the `config` parameter is a dictionary deserialized by [js-yaml](https://github.com/nodeca/js-yaml). The second parameter `log` prints strings to the standard error stream for debugging, rather than being a configuration name.
 
 Run with:
 
