@@ -9,7 +9,6 @@
 
 		<RepositoryUrl>https://github.com/MihomoManager/MihomoManager.MihomoMixin.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>yueyinqiu</Authors>
